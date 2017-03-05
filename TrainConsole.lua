@@ -58,17 +58,17 @@ end
 
 -- carry action on environment
 if (action == 1) then
-    action = -1
+    move = -1
 elseif (action == 2) then
-    action = 0
+    move = 0
 else
-    action = 1
+    move = 1
 end
 
 -- observe new state
 fruitRow = fruitRow + 1
  -- The min/max prevents the basket from moving out of the grid.
-basketPosition = math.min(math.max(2, basketPosition + action), gridSize - 1)
+basketPosition = math.min(math.max(2, basketPosition + move), gridSize - 1)
 fruitColumn = fruitColumn -- it's fixed
 state = torch.Tensor({ fruitRow, fruitColumn, basketPosition })
 
@@ -132,7 +132,7 @@ else
    discount = 0.9  -- discount factor
    
    -- Gives us Q_sa for all actions
-   target = model:forward(memoryInput.inputState)
+   target = model:forward(memoryInput.inputState):clone()
    
    -- reward + discount(gamma) * max_a' Q(s',a')
    -- We are setting the Q-value for the action to  r + γmax a’ Q(s’, a’). 
